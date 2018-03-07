@@ -13,6 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocationPage } from '../pages/location/location';
 import { SettingPage } from '../pages/setting/setting';
 import { ScanPage } from '../pages/scan/scan';
+import { BLE } from '@ionic-native/ble';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ScanPage } from '../pages/scan/scan';
   providers: [
     StatusBar,
     SplashScreen,
+    BLE,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
