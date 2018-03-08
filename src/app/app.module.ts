@@ -14,6 +14,9 @@ import { LocationPage } from '../pages/location/location';
 import { SettingPage } from '../pages/setting/setting';
 import { ScanPage } from '../pages/scan/scan';
 import { BLE } from '@ionic-native/ble';
+import { DevicePage } from '../pages/device/device';
+import { GoogleMaps } from '@ionic-native/google-maps';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { BLE } from '@ionic-native/ble';
     TabsPage,
     LocationPage,
     SettingPage,
-    ScanPage
+    ScanPage,
+    DevicePage
   ],
   imports: [
     BrowserModule,
@@ -39,12 +43,14 @@ import { BLE } from '@ionic-native/ble';
     TabsPage,
     LocationPage,
     SettingPage,
-    ScanPage
+    ScanPage,
+    DevicePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     BLE,
+    GoogleMaps,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

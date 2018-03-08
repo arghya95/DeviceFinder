@@ -1,3 +1,11 @@
 page-location {
+    #map { height: 100%;
+        position: relative;
+    }
+    #map:after {
+    display: block;
+    
+    position: absolute;
+    }
 
 }
