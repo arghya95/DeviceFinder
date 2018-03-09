@@ -23,22 +23,26 @@ export class DevicePage {
   constructor(public navCtrl: NavController, public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
-    this.connect(this.device.id);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DevicePage');
+    this.connect(this.device.id);
   }
   connect(deviceID) {
         this.characteristics = [];
         
         this.ble.connect(deviceID).subscribe(peripheralData => {
+        console.log('peripheralData');
+        console.log(peripheralData)
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
         this.connecting = false;
         },
         peripheralData => {
+        this.connecting = false
         console.log('disconnected');
+        alert('disconnected');
         });
     }
     

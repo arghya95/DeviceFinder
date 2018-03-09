@@ -8,10 +8,10 @@
   <button ion-button (click)="startScanning()">Scan</button>
   <ion-list inset>
     <ion-item-sliding *ngFor='let device of devices' #slidingItem>
-      <button ion-item (click)='connectToDevice(device)'>
-        <h2>{{device.name}}</h2>
-        <p>{{device.id}}</p>
-        <p>{{device.rssi}}</p>
+      <button ion-item (click)='connectToDevice(device)' style="border:1px solid '#000'">
+        <h2>Name: {{device.name}}</h2>
+        <p>Mac Address: {{device.id}}</p>
+        <p>rssi: {{device.rssi}}</p>
       </button>
     </ion-item-sliding>
   </ion-list>

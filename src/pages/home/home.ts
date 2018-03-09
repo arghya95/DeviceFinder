@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
 import { DevicePage } from '../device/device';
 
@@ -11,23 +11,26 @@ export class HomePage {
   devices: any;
   isScanning: boolean;
 
-  constructor(public navCtrl: NavController,private ble: BLE) {
+  constructor(public navCtrl: NavController,private ble: BLE,platform: Platform) {
     this.devices = [];
     this.isScanning = false;
-
-
-
-    this.ble.isEnabled().then(()=>{
-      console.log('bluetooth already enabled')
-    })
-    .catch(()=>{
-      this.ble.enable().then(()=>{
-        console.log('bluetooth enabling....')
+    platform.ready().then(() => {
+      this.ble.isEnabled().then(()=>{
+        console.log('bluetooth already enabled')
       })
       .catch(()=>{
-        console.log('error');
+        this.ble.enable().then(()=>{
+          console.log('bluetooth enabling....')
+        })
+        .catch(()=>{
+          console.log('error');
+        })
       })
+
     })
+
+
+    
 
   }
   
@@ -47,7 +50,7 @@ export class HomePage {
       console.log(JSON.stringify(this.devices))
       this.isScanning = false;
     });
-    }, 3000);
+    }, 30000);
     
     }
     

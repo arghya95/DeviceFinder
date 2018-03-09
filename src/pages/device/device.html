@@ -17,10 +17,16 @@
 
 </ion-content> -->
 
-<ion-navbar *navbar>
+<ion-header class="ion-nav">
+  <ion-navbar>
+    <ion-title>{{device.name}}</ion-title>
+    <ion-title>{{device.id}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<!-- <ion-navbar *navbar>
   <ion-title>{{device.name}}</ion-title>
-</ion-navbar>
-  <ion-content>
+</ion-navbar> -->
+  <ion-content padding>
     <ion-list inset>
       <ion-item-sliding *ngFor='let characteristic of characteristics' #slidingItem>
         <button ion-item (click)="connectToCharacteristic(device.id,characteristic)">
