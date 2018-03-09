@@ -18,7 +18,7 @@ ion-header{
     ion-navbar{
         .toolbar-background{
             //background: #f6341a !important;
-            background: #005696;
+            background: #1e8515;
         }
         ion-title{
             .toolbar-title{
@@ -27,4 +27,17 @@ ion-header{
             }
         }
     }
+    ion-tabs{
+        background: #005696 !important;
+        // color: #fff !important;
+    }
+    // ion-tabs{
+    //     .tab-button{
+    //         background: #008bf2 !important;
+    //         color: #fff !important;
+    //         border: 1px solid rgba(0, 86, 150, 0.3);
+    //         border-top: none;
+    //         border-bottom: none;
+    //     }
+    // }
 }

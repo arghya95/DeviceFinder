@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 /**
  * Generated class for the DevicePage page.
@@ -20,7 +21,7 @@ export class DevicePage {
   characteristics: any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private ble: BLE) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private ble: BLE,private localNotifications: LocalNotifications) {
     this.device = this.navParams.get('device');
     this.connecting = true;
   }
@@ -37,6 +38,22 @@ export class DevicePage {
         console.log(peripheralData)
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
+
+
+this.ble.readRSSI(deviceID).then(()=>{
+  if(peripheralData.rssi<-40) {
+    this.localNotifications.schedule({
+      text: 'Your device is too far',
+      sound:  'F:\Projects\DeviceFinder\src\assets\sounds\Annoying_Alarm_Clock-UncleKornicob-420925725.mp3',
+    });
+    alert('device distance is too far');
+
+  }
+})
+
+
+
+
         this.connecting = false;
         },
         peripheralData => {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
+import { Geolocation } from '@ionic-native/geolocation';
 
 /**
  * Generated class for the LocationPage page.
@@ -15,12 +16,15 @@ import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
 })
 export class LocationPage {
   map: GoogleMap;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private googleMaps: GoogleMaps) {
+  latitude: any;
+  longitude: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private googleMaps: GoogleMaps,private geolocation: Geolocation) {
   }
 
   ionViewDidLoad() {
     console.log('before load.....')
     this.loadMap();
+    this.getLocation();
     console.log('after load...');
   }
   loadMap() {
@@ -39,8 +43,8 @@ export class LocationPage {
         map.moveCamera(position);
         let markerOptions: MarkerOptions = {
           position: {
-            lat: 22.688154,
-            lng: 88.4711731
+            lat: this.latitude,
+            lng: this.longitude
           },
           title: 'WorkPosition',
           icon: 'red',
@@ -58,6 +62,15 @@ export class LocationPage {
           // console.log(map.getDiv());
           // map.bindTo('postion',map,'center');
     });
+  }
+
+  getLocation() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
   }
 
 }
