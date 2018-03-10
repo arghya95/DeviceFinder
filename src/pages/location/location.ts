@@ -24,21 +24,23 @@ export class LocationPage {
   ionViewDidLoad() {
     console.log('before load.....')
     this.loadMap();
-    this.getLocation();
     console.log('after load...');
+  }
+  ngAfterViewInit() {
+    this.getLocation();
   }
   loadMap() {
     let element = document.getElementById('map');
     let map: GoogleMap = GoogleMaps.create(element, {});
-    let latlng = new LatLng(22.688154, 88.4711731);
+    let latlng = new LatLng(this.latitude, this.longitude);
  
     
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
       console.log('Map Is Ready....')
         let position: CameraPosition<Object> = {
-      target: latlng,
-      zoom: 18,
-      tilt: 30
+            target: latlng,
+            zoom: 18,
+            tilt: 30
         }
         map.moveCamera(position);
         let markerOptions: MarkerOptions = {
@@ -46,11 +48,11 @@ export class LocationPage {
             lat: this.latitude,
             lng: this.longitude
           },
-          title: 'WorkPosition',
+          title: 'Me',
           icon: 'red',
           // { url : 'https://i.pinimg.com/736x/73/26/cd/7326cdf1c2f2815ca118d4a4829a90f7--marker-icon-map-marker.jpg' },
           animation: GoogleMapsAnimation.BOUNCE,
-          draggable: true
+          draggable: false
         };
         map.addMarker(markerOptions)
         .then(marker => {
