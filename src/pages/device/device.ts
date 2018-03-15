@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
-// import { LocalNotifications } from '@ionic-native/local-notifications';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 /**
  * Generated class for the DevicePage page.
@@ -27,7 +27,7 @@ export class DevicePage {
   deviceRssi: number = -90;
 
 
-  constructor(public navCtrl: NavController,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
+  constructor(public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
   }
@@ -93,7 +93,11 @@ export class DevicePage {
         this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
           // alert('high alert..'+value);
-          
+          this.localNotifications.schedule({
+            id: 1,
+            text: 'Your Device is Lost',
+            sound: 'file://audio/alarm.mp3'
+           });
         })
         .catch(()=>{
           alert('error');
@@ -102,7 +106,7 @@ export class DevicePage {
       } 
       
     }
-/*
+
     public schedule() {
       // Schedule a single notification
       this.localNotifications.schedule({
@@ -111,7 +115,7 @@ export class DevicePage {
        sound: 'file://audio/alarm.mp3'
       });
       }
-*/
+
     changeFar() {
       this.deviceRssi = -100;
       // if(this.bleRssi<-100) {
