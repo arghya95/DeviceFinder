@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
+// import { LocalNotifications } from '@ionic-native/local-notifications';
 
 /**
  * Generated class for the DevicePage page.
@@ -22,9 +23,11 @@ export class DevicePage {
   connecting: boolean;
   characteristics: any;
   power: any;
+  bleRssi: any;
+  deviceRssi: number = -90;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private ble: BLE) {
+  constructor(public navCtrl: NavController,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
   }
@@ -33,6 +36,7 @@ export class DevicePage {
     console.log('ionViewDidLoad DevicePage');
     this.connect(this.device.id);
   }
+ 
   connect(deviceID) {
         this.characteristics = [];
         
@@ -58,31 +62,137 @@ export class DevicePage {
         this.connecting = false;
         },
         peripheralData => {
-        this.connecting = false
+        this.connecting = false;
+
+
+        let value = 2;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          alert('high alert..'+value);
+        })
+        .catch(()=>{
+          alert('error');
+        })
+
+
         console.log('disconnected');
         alert('disconnected');
         });
     }
+
+    ngDoCheck() {
+
+      this.ble.readRSSI(this.device.id)
+      .then((rssi)=>{
+        this.bleRssi = rssi;
+      })
+      if(this.bleRssi<this.deviceRssi) {
+        let value = 2;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          // alert('high alert..'+value);
+          
+        })
+        .catch(()=>{
+          alert('error');
+        })
+        
+      } 
+      
+    }
+/*
+    public schedule() {
+      // Schedule a single notification
+      this.localNotifications.schedule({
+       id: 1,
+       text: 'Your Device is Lost',
+       sound: 'file://audio/alarm.mp3'
+      });
+      }
+*/
+    changeFar() {
+      this.deviceRssi = -100;
+      // if(this.bleRssi<-100) {
+      //   let value = 2;
+      //   let buffer = new Uint8Array([value]).buffer;
+      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      //   .then((value)=>{
+      //     // alert('high alert..'+value);
+      //   })
+      //   .catch(()=>{
+      //     alert('error');
+      //   })
+        
+      // } 
+    }
+    changeMedium() {
+      this.deviceRssi = -80
+      // if(this.bleRssi<-80) {
+      //   let value = 2;
+      //   let buffer = new Uint8Array([value]).buffer;
+      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      //   .then((value)=>{
+      //     // alert('high alert..'+value);
+      //   })
+      //   .catch(()=>{
+      //     alert('error');
+      //   })
+        
+      // } 
+    }
+    changeNear() {
+      this.deviceRssi = -50;
+      // if(this.bleRssi<-50) {
+      //   let value = 2;
+      //   let buffer = new Uint8Array([value]).buffer;
+      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      //   .then((value)=>{
+      //     // alert('high alert..'+value);
+      //   })
+      //   .catch(()=>{
+      //     alert('error');
+      //   })
+        
+      // } 
+    }
+   
+   /* change(event) {
+      if(this.bleRssi<this.deviceRssi) {
+        let value = 2;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          // alert('high alert..'+value);
+        })
+        .catch(()=>{
+          alert('error');
+        })
+        
+      } 
+    }
+    */
     
-    connectToCharacteristic(deviceID,characteristic) {
+connectToCharacteristic(deviceID,characteristic) {
         console.log("Connect To Characteristic");
         console.log(deviceID);
         // alert(characteristic.service);
-if(characteristic.service==1802) {
+    if(characteristic.service==1802) {
 
-  let value = 2;
-  let buffer = new Uint8Array([value]).buffer;
-  this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-  .then((value)=>{
-    alert('high alert..'+value);
-  })
-  .catch(()=>{
-    alert('error');
-  })
-}
-else{
-  alert('not alert service')
-}
+      let value = 2;
+      let buffer = new Uint8Array([value]).buffer;
+      this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      .then((value)=>{
+        alert('high alert..'+value);
+      })
+      .catch(()=>{
+        alert('error');
+      })
+    }
+    else{
+      alert('not alert service')
+    }
 
     }
 

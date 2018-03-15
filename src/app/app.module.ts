@@ -16,6 +16,7 @@ import { ScanPage } from '../pages/scan/scan';
 import { BLE } from '@ionic-native/ble';
 import { DevicePage } from '../pages/device/device';
 import { GoogleMaps } from '@ionic-native/google-maps';
+// import { LocalNotifications } from '@ionic-native/local-notifications';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     SplashScreen,
     BLE,
     GoogleMaps,
+    // LocalNotifications,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
