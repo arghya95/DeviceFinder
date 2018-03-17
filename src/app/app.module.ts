@@ -17,6 +17,7 @@ import { BLE } from '@ionic-native/ble';
 import { DevicePage } from '../pages/device/device';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     BLE,
     GoogleMaps,
     LocalNotifications,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

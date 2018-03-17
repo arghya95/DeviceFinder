@@ -96,7 +96,7 @@ export class DevicePage {
           this.localNotifications.schedule({
             id: 1,
             text: 'Your Device is Lost',
-            sound: 'file://audio/alarm.mp3'
+            sound: 'file://audio/alarm2.mp3'
            });
         })
         .catch(()=>{
@@ -112,7 +112,7 @@ export class DevicePage {
       this.localNotifications.schedule({
        id: 1,
        text: 'Your Device is Lost',
-       sound: 'file://audio/alarm.mp3'
+       sound: 'file://audio/alarm2.mp3'
       });
       }
 

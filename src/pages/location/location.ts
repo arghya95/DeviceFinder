@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
+import { Geolocation } from '@ionic-native/geolocation';
 
 /**
  * Generated class for the LocationPage page.
@@ -15,20 +16,36 @@ import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
 })
 export class LocationPage {
   map: GoogleMap;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private googleMaps: GoogleMaps) {
+  latitude: any;
+  longitude: any;
+  constructor(public navCtrl: NavController,private geolocation: Geolocation, public navParams: NavParams, private googleMaps: GoogleMaps) {
+    
+    
+
   }
 
   ionViewDidLoad() {
     console.log('before load.....')
     this.loadMap();
+    
     console.log('after load...');
   }
+  ngAfterV() {
+    // console.log(this.latitude);
+  }
   loadMap() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+  
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+      console.log(this.latitude);
+
+
     let element = document.getElementById('map');
     let map: GoogleMap = GoogleMaps.create(element, {});
-    let latlng = new LatLng(22.688154, 88.4711731);
- 
-    
+    let latlng = new LatLng(this.latitude, this.longitude);
+
+    console.log(this.latitude);
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
       console.log('Map Is Ready....')
         let position: CameraPosition<Object> = {
@@ -39,12 +56,11 @@ export class LocationPage {
         map.moveCamera(position);
         let markerOptions: MarkerOptions = {
           position: {
-            lat: 22.688154,
-            lng: 88.4711731
+            lat: this.latitude,
+            lng: this.longitude
           },
           title: 'WorkPosition',
           icon: 'red',
-          // { url : 'https://i.pinimg.com/736x/73/26/cd/7326cdf1c2f2815ca118d4a4829a90f7--marker-icon-map-marker.jpg' },
           animation: GoogleMapsAnimation.BOUNCE,
           draggable: true
         };
@@ -55,9 +71,14 @@ export class LocationPage {
               alert('clicked');
             });
         });
-          // console.log(map.getDiv());
-          // map.bindTo('postion',map,'center');
+          
     });
+
+
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+    
   }
 
 }
