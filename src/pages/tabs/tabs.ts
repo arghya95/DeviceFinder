@@ -6,6 +6,7 @@ import { HomePage } from '../home/home';
 import { LocationPage } from '../location/location';
 import { SettingPage } from '../setting/setting';
 import { ScanPage } from '../scan/scan';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -17,7 +18,13 @@ export class TabsPage {
   tab3Root = LocationPage;
   tab4Root = SettingPage;
 
-  constructor() {
+
+
+  latitude: any;
+  longitude: any;
+
+  constructor(private geolocation: Geolocation) {
+    
 
   }
 }

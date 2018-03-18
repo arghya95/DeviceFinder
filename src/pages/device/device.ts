@@ -24,7 +24,7 @@ export class DevicePage {
   characteristics: any;
   power: any;
   bleRssi: any;
-  deviceRssi: number = -90;
+  deviceRssi: number = -100;
 
 
   constructor(public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
@@ -44,7 +44,7 @@ export class DevicePage {
         console.log('peripheralData');
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
-/*
+        /*
         this.ble.read(deviceID, LIGHTBULB_SERVICE, SWITCH_CHARACTERISTIC).then(
           buffer => {
             let data = new Uint8Array(buffer);

@@ -50,7 +50,7 @@ export class HomePage {
       console.log(JSON.stringify(this.devices))
       this.isScanning = false;
     });
-    }, 30000);
+    }, 5000);
     
     }
     

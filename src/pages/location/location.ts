@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 
 /**
  * Generated class for the LocationPage page.
@@ -18,7 +19,7 @@ export class LocationPage {
   map: GoogleMap;
   latitude: any;
   longitude: any;
-  constructor(public navCtrl: NavController,private geolocation: Geolocation, public navParams: NavParams, private googleMaps: GoogleMaps) {
+  constructor(public navCtrl: NavController,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public navParams: NavParams, private googleMaps: GoogleMaps) {
     
     
 
@@ -30,15 +31,25 @@ export class LocationPage {
     
     console.log('after load...');
   }
-  ngAfterV() {
-    // console.log(this.latitude);
-  }
+ 
   loadMap() {
     this.geolocation.getCurrentPosition().then((resp) => {
   
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
       console.log(this.latitude);
+      
+
+  this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
+  .then((result: NativeGeocoderReverseResult) => {
+    alert(this.latitude);
+    alert(result);
+    console.log(result);
+    alert(JSON.stringify(result));
+    console.log(JSON.stringify(result));    
+    alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
+  })
+  .catch((error: any) => alert(error));
 
 
     let element = document.getElementById('map');
@@ -77,6 +88,7 @@ export class LocationPage {
 
      }).catch((error) => {
        console.log('Error getting location', error);
+       alert(error);
      });
     
   }

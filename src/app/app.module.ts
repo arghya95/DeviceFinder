@@ -18,6 +18,9 @@ import { DevicePage } from '../pages/device/device';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { NativeGeocoder } from '@ionic-native/native-geocoder';
 
 
 @NgModule({
@@ -55,6 +58,9 @@ import { Geolocation } from '@ionic-native/geolocation';
     GoogleMaps,
     LocalNotifications,
     Geolocation,
+    Diagnostic,
+    LocationAccuracy,
+    NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

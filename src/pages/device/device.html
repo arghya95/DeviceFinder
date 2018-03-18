@@ -27,7 +27,7 @@
   <ion-title>{{device.name}}</ion-title>
 </ion-navbar> -->
   <ion-content padding>
-      <ion-grid> 
+      <!-- <ion-grid> 
         <ion-row> 
           <ion-col>
             <button ion-button color="secondary" outline (click)="changeFar()">Far</button>
@@ -42,18 +42,18 @@
         <ion-row>
             <button ion-button outline color="dark" (click)="schedule()">Test Notification</button>
         </ion-row>
-      </ion-grid>
-    <!-- <ion-list>
+      </ion-grid> -->
+    <ion-list>
       <ion-item>
-          <ion-range min="-44" max="-100" [(ngModel)]="deviceRssi" (ionChange)=change() pin="true" color="secondary">
-            <ion-label range-left>-44</ion-label>
-            <ion-label range-right>-100</ion-label>
+          <ion-range min="-100" max="-44" [(ngModel)]="deviceRssi" pin="true" color="secondary">
+            <ion-label range-left>-100</ion-label>
+            <ion-label range-right>-44</ion-label>
           </ion-range>
       </ion-item>
       <ion-item>
           <h1>{{deviceRssi}}</h1>
       </ion-item>
-    </ion-list> -->
+    </ion-list>
     <ion-list inset>
       <ion-item-sliding *ngFor='let characteristic of characteristics' #slidingItem>
         <button ion-item (click)="connectToCharacteristic(device.id,characteristic)">
