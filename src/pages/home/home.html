@@ -1,6 +1,7 @@
 <ion-header class="ion-nav">
   <ion-navbar>
     <ion-title>Home</ion-title>
+    <button ion-button (click)='logoutClick()'>Logout</button>
   </ion-navbar>
 </ion-header>
 
@@ -9,14 +10,30 @@
   <button ion-button (click)="startScanning()">Scan</button>
   <ion-list inset>
     <ion-item-sliding *ngFor='let device of devices' #slidingItem>
-      <button ion-item (click)='connectToDevice(device)' style="border:1px solid '#000'">
+      <button ion-item (click)='connectToDevice1(device)' style="border:1px solid '#000'">
         <h2>Name: KM-Tag</h2>
         <p>Mac Address: {{device.id}}</p>
         <p>rssi: {{device.rssi}}</p>
       </button>
     </ion-item-sliding>
   </ion-list>
-  <ion-spinner *ngIf='isScanning==true' name='circles'></ion-spinner>
+  <!-- <ion-spinner *ngIf='isScanning==true' name='circles'></ion-spinner> -->
+  <ion-card *ngFor='let device of devices'>
+    <ion-card-header>
+      Name: KM-Tag
+    </ion-card-header>
+    
+    <ion-card-content>
+        <p>Mac Address: {{device.id}}</p>
+        <p>Signal Strength: {{device.rssi}}</p>
+      <button ion-button color='secondary' *ngIf='connecting==true' (click)='connectToDevice2(device)'>
+        Connect
+      </button>
+      <button ion-button color='danger' *ngIf='connecting==false' (click)='disconnect(device)'>
+          Disconnect
+        </button>  
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 

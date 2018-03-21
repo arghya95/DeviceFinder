@@ -21,7 +21,20 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
-
+import { LoginPage } from '../pages/login/login';
+import * as firebase from 'firebase';
+import { RegisterPage } from '../pages/register/register';
+// import { Firebase } from '@ionic-native/firebase';
+ // Initialize Firebase
+ var config = {
+  apiKey: "AIzaSyD3TjHpzP84yWeNx9PjUJ0wIB-kSw52cNA",
+  authDomain: "ng-http-practice.firebaseapp.com",
+  databaseURL: "https://ng-http-practice.firebaseio.com",
+  projectId: "ng-http-practice",
+  storageBucket: "ng-http-practice.appspot.com",
+  messagingSenderId: "68744271603"
+};
+firebase.initializeApp(config);
 
 @NgModule({
   declarations: [
@@ -33,7 +46,9 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
     LocationPage,
     SettingPage,
     ScanPage,
-    DevicePage
+    DevicePage,
+    LoginPage,
+    RegisterPage
   ],
   imports: [
     BrowserModule,
@@ -49,7 +64,9 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
     LocationPage,
     SettingPage,
     ScanPage,
-    DevicePage
+    DevicePage,
+    LoginPage,
+    RegisterPage
   ],
   providers: [
     StatusBar,
@@ -61,6 +78,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
     Diagnostic,
     LocationAccuracy,
     NativeGeocoder,
+    // Firebase,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

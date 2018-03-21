@@ -42,8 +42,6 @@ export class LocationPage {
 
   this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
   .then((result: NativeGeocoderReverseResult) => {
-    alert(this.latitude);
-    alert(result);
     console.log(result);
     alert(JSON.stringify(result));
     console.log(JSON.stringify(result));    
