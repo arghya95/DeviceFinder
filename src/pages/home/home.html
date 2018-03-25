@@ -1,7 +1,11 @@
 <ion-header class="ion-nav">
   <ion-navbar>
     <ion-title>Home</ion-title>
-    <button ion-button (click)='logoutClick()'>Logout</button>
+    <ion-buttons end>
+    <button class="logout" ion-button (click)='logoutClick()' icon-start>
+        <ion-icon name='md-log-out'></ion-icon>
+        Logout</button>
+  </ion-buttons>
   </ion-navbar>
 </ion-header>
 

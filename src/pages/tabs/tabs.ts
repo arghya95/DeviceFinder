@@ -10,6 +10,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Platform } from 'ionic-angular';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { BLE } from '@ionic-native/ble';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -26,7 +27,7 @@ export class TabsPage {
   latitude: any;
   longitude: any;
 
-  constructor(private geolocation: Geolocation,platform: Platform,private locationAccuracy: LocationAccuracy,private diagnostic: Diagnostic) {
+  constructor(private ble: BLE,private geolocation: Geolocation,platform: Platform,private locationAccuracy: LocationAccuracy,private diagnostic: Diagnostic) {
     platform.ready().then(() => {
    
       //location permission code
@@ -61,8 +62,8 @@ export class TabsPage {
         alert(JSON.stringify(e));
         });
 
-
     });
 
   }
+
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
@@ -19,7 +19,8 @@ export class LocationPage {
   map: GoogleMap;
   latitude: any;
   longitude: any;
-  constructor(public navCtrl: NavController,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public navParams: NavParams, private googleMaps: GoogleMaps) {
+  // loading: any;
+  constructor(public navCtrl: NavController,public loadingCtrl: LoadingController,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public navParams: NavParams, private googleMaps: GoogleMaps) {
     
     
 
@@ -33,6 +34,9 @@ export class LocationPage {
   }
  
   loadMap() {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait Map in Loading...'
+    });
     this.geolocation.getCurrentPosition().then((resp) => {
   
       this.latitude = resp.coords.latitude;
@@ -56,7 +60,8 @@ export class LocationPage {
 
     console.log(this.latitude);
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      console.log('Map Is Ready....')
+      console.log('Map Is Ready....');
+        loading.dismiss();
         let position: CameraPosition<Object> = {
       target: latlng,
       zoom: 18,
@@ -68,7 +73,7 @@ export class LocationPage {
             lat: this.latitude,
             lng: this.longitude
           },
-          title: 'WorkPosition',
+          title: 'My Location',
           icon: 'red',
           animation: GoogleMapsAnimation.BOUNCE,
           draggable: true

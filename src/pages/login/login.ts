@@ -25,6 +25,13 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
   }
   goLogin() {
+    if(this.email=="" || this.email==undefined || this.email==null) {
+      this.showPopup("Error","Email Cannot be blank");
+    }
+    else if(this.password=="" || this.password==undefined || this.password==null) {
+      this.showPopup("Error","Password Cannot be blank");
+    }
+    else {
     return firebase.auth().signInWithEmailAndPassword(this.email, this.password)
      .then(user => {
        console.log(this.email);
@@ -35,6 +42,7 @@ export class LoginPage {
       .catch((_error) => {
         alert(_error.message);
       });
+    }
    }
 
    goRegister() {
@@ -73,6 +81,14 @@ export class LoginPage {
       ]
     });
     prompt.present();
+  }
+  showPopup(title, text) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 

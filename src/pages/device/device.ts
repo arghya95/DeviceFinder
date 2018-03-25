@@ -11,7 +11,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
  */
 const LIGHTBULB_SERVICE = '1802';
 const SWITCH_CHARACTERISTIC = '2a06';
-const DIMMER_CHARACTERISTIC = 'ffe3';
+const DIMMER_CHARACTERISTIC = 'ffe0';
 
 
 @Component({
@@ -25,11 +25,13 @@ export class DevicePage {
   power: any;
   bleRssi: any;
   deviceRssi: number = -100;
+  searchClick: any;
 
 
-  constructor(public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
+  constructor(private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
+    this.searchClick = true;
   }
 
   ionViewDidLoad() {
@@ -103,9 +105,11 @@ export class DevicePage {
           alert('error');
         })
         
-      } 
+      }
+     
       
     }
+
 
     public schedule() {
       // Schedule a single notification
@@ -116,68 +120,6 @@ export class DevicePage {
       });
       }
 
-    changeFar() {
-      this.deviceRssi = -100;
-      // if(this.bleRssi<-100) {
-      //   let value = 2;
-      //   let buffer = new Uint8Array([value]).buffer;
-      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-      //   .then((value)=>{
-      //     // alert('high alert..'+value);
-      //   })
-      //   .catch(()=>{
-      //     alert('error');
-      //   })
-        
-      // } 
-    }
-    changeMedium() {
-      this.deviceRssi = -80
-      // if(this.bleRssi<-80) {
-      //   let value = 2;
-      //   let buffer = new Uint8Array([value]).buffer;
-      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-      //   .then((value)=>{
-      //     // alert('high alert..'+value);
-      //   })
-      //   .catch(()=>{
-      //     alert('error');
-      //   })
-        
-      // } 
-    }
-    changeNear() {
-      this.deviceRssi = -50;
-      // if(this.bleRssi<-50) {
-      //   let value = 2;
-      //   let buffer = new Uint8Array([value]).buffer;
-      //   this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-      //   .then((value)=>{
-      //     // alert('high alert..'+value);
-      //   })
-      //   .catch(()=>{
-      //     alert('error');
-      //   })
-        
-      // } 
-    }
-   
-   /* change(event) {
-      if(this.bleRssi<this.deviceRssi) {
-        let value = 2;
-        let buffer = new Uint8Array([value]).buffer;
-        this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-        .then((value)=>{
-          // alert('high alert..'+value);
-        })
-        .catch(()=>{
-          alert('error');
-        })
-        
-      } 
-    }
-    */
-    
 connectToCharacteristic(deviceID,characteristic) {
         console.log("Connect To Characteristic");
         console.log(deviceID);
@@ -194,10 +136,44 @@ connectToCharacteristic(deviceID,characteristic) {
         alert('error');
       })
     }
+    else if(characteristic.service=='ffe0') {
+      this.ble.startNotification(deviceID, 'ffe0', 'ffe1')
+      .subscribe((buffer) => {
+        alert(String.fromCharCode.apply(null, new Uint8Array(buffer)))
+        });  
+    }
     else{
       alert('not alert service')
     }
 
+    }
+    searchPeripheral(deviceID){
+      this.ngZone.run(() => {
+        let value = 2;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          alert('high alert..'+value);
+          this.searchClick = false;
+        })
+        .catch(()=>{
+          alert('error');
+        })
+      })
+    }
+    stopSearch(deviceID) {
+      this.ngZone.run(() => {
+        let value = 0;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          alert('high alert..'+value);
+          this.searchClick = true;
+        })
+        .catch(()=>{
+          alert('error');
+        })
+      })
     }
 
 }

@@ -46,13 +46,17 @@
     <ion-list>
       <ion-item>
           <ion-range min="-100" max="-44" [(ngModel)]="deviceRssi" pin="true" color="secondary">
-            <ion-label range-left>-100</ion-label>
-            <ion-label range-right>-44</ion-label>
+            <ion-label range-left>Far</ion-label>
+            <ion-label range-right>Near</ion-label>
           </ion-range>
       </ion-item>
       <ion-item>
           <h1>{{deviceRssi}}</h1>
       </ion-item>
+    </ion-list>
+    <ion-list>
+      <button ion-button *ngIf='searchClick==true' (click)='searchPeripheral(device.id)'>Search Device</button>
+      <button ion-button *ngIf='searchClick==false' (click)='stopSearch(device.id)'>Stop Search</button>
     </ion-list>
     <ion-list inset>
       <ion-item-sliding *ngFor='let characteristic of characteristics' #slidingItem>

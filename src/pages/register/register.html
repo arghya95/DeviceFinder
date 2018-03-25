@@ -7,37 +7,41 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Register</ion-title>
+    <ion-title><span text-color="my-custom-color"> Register </span></ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <ion-list>
+    <div class="logoDiv" text-center>
+        <span><img src="assets/imgs/icon.png" height="130px" width="130px"></span>
+        <h4>KM Wallet Care</h4>
+      </div>
+    <ion-list class="inputFields">
 
         <ion-item>
-          <ion-label stacked>First Name</ion-label>
+          <ion-label floating>First Name</ion-label>
           <ion-input type="text" [(ngModel)]="fname"></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>Last Name</ion-label>
+          <ion-label floating>Last Name</ion-label>
           <ion-input type="text" [(ngModel)]="lname"></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>Email</ion-label>
+          <ion-label floating>Email</ion-label>
           <ion-input type="email" [(ngModel)]="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>Password</ion-label>
+          <ion-label floating>Password</ion-label>
           <ion-input type="password" [(ngModel)]="password"></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>Mobile Number</ion-label>
+          <ion-label floating>Mobile Number</ion-label>
           <ion-input type="text" [(ngModel)]="mobile"></ion-input>
         </ion-item>
     
