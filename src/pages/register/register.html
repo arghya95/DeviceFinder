@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>register</ion-title>
+    <ion-title>Register</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -28,7 +28,7 @@
     
         <ion-item>
           <ion-label stacked>Email</ion-label>
-          <ion-input type="email" [(ngModel)]="email"></ion-input>
+          <ion-input type="email" [(ngModel)]="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"></ion-input>
         </ion-item>
     
         <ion-item>

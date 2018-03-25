@@ -18,7 +18,7 @@ ion-header{
     ion-navbar{
         .toolbar-background{
             //background: #f6341a !important;
-            background: #005696;
+            background: #0cecd4;
         }
         ion-title{
             .toolbar-title{
@@ -29,7 +29,7 @@ ion-header{
     }
 }
 ion-tabs .tab-button:hover:not(.disable-hover), ion-tabs .tab-button[aria-selected=true]{
-    background: #005696 !important;
+    background: #0cecd4 !important;
     color: #fff !important;
 }
 ion-tabs{
