@@ -11,7 +11,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
  */
 const LIGHTBULB_SERVICE = '1802';
 const SWITCH_CHARACTERISTIC = '2a06';
-const DIMMER_CHARACTERISTIC = 'ffe0';
+const LINKLOSS_SERVICE = '1803';
 
 
 @Component({
@@ -73,8 +73,8 @@ export class DevicePage {
         .then((value)=>{
           alert('high alert..'+value);
         })
-        .catch(()=>{
-          alert('error');
+        .catch((e)=>{
+          alert(e);
         })
 
 
@@ -101,8 +101,8 @@ export class DevicePage {
             sound: 'file://audio/alarm2.mp3'
            });
         })
-        .catch(()=>{
-          alert('error');
+        .catch((e)=>{
+          // alert(e);
         })
         
       }
@@ -132,8 +132,8 @@ connectToCharacteristic(deviceID,characteristic) {
       .then((value)=>{
         alert('high alert..'+value);
       })
-      .catch(()=>{
-        alert('error');
+      .catch((e)=>{
+        alert(e);
       })
     }
     else if(characteristic.service=='ffe0') {
@@ -151,27 +151,33 @@ connectToCharacteristic(deviceID,characteristic) {
       this.ngZone.run(() => {
         let value = 2;
         let buffer = new Uint8Array([value]).buffer;
-        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+
+        // setTimeout(() => {
+        this.ble.write(deviceID,LINKLOSS_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
           alert('high alert..'+value);
           this.searchClick = false;
         })
-        .catch(()=>{
-          alert('error');
+        .catch((e)=>{
+          alert('search device error'+e);
+          this.searchClick = true;
         })
+      // }, 50000);
+
       })
     }
     stopSearch(deviceID) {
       this.ngZone.run(() => {
         let value = 0;
         let buffer = new Uint8Array([value]).buffer;
-        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        this.ble.write(deviceID,LINKLOSS_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
           alert('high alert..'+value);
           this.searchClick = true;
         })
-        .catch(()=>{
-          alert('error');
+        .catch((e)=>{
+          alert('stop search error'+e);
+          this.searchClick = false;
         })
       })
     }

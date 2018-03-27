@@ -21,11 +21,11 @@ export class HomePage {
   connecting: boolean;
   constructor(private ngZone: NgZone,public loadingCtrl: LoadingController,public navCtrl: NavController,public navParams: NavParams,private ble: BLE,platform: Platform, public modalCtrl:ModalController) {
     // this.devices = [];
+
     let loading = this.loadingCtrl.create({
       content: 'Please wait Scanning in Progress...'
     });
-  
-    loading.present();
+
     // this.devices = this.navParams.get('devices');
     this.isScanning = false;
     // let profileModal = this.modalCtrl.create(AboutPage);
@@ -34,21 +34,27 @@ export class HomePage {
       this.ble.isEnabled().then(()=>{
       console.log('bluetooth already enabled');
 
+      loading.present();
+
       console.log('Scanning Started');
       this.devices = [];
       this.isScanning = true;
       this.ble.startScan([]).subscribe(device => {
+        this.ngZone.run(() => {
         console.log(device);
       this.devices.push(device);
+        });
       });
       
       setTimeout(() => {
         this.ble.stopScan().then(() => {
+          this.ngZone.run(() => {
         console.log('Scanning has stopped');
         console.log(JSON.stringify(this.devices))
         this.isScanning = false;
         loading.dismiss();
         this.connecting = true;
+          });
       });
       }, 5000);
 
@@ -57,23 +63,28 @@ export class HomePage {
       .catch(()=>{
         this.ble.enable().then(()=>{
           console.log('bluetooth enabling....');
-
+        
+          loading.present();
 
           console.log('Scanning Started');
           this.devices = [];
           this.isScanning = true;
           this.ble.startScan([]).subscribe(device => {
+            this.ngZone.run(() => {
             console.log(device);
           this.devices.push(device);
+            });
           });
           
           setTimeout(() => {
             this.ble.stopScan().then(() => {
+              this.ngZone.run(() => {
             console.log('Scanning has stopped');
             console.log(JSON.stringify(this.devices))
             this.isScanning = false;
             loading.dismiss();
             this.connecting = true;
+              });
           });
           }, 5000);
          
@@ -91,6 +102,11 @@ export class HomePage {
   
   startScanning() {
     console.log('Scanning Started');
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait Scanning in Progress...'
+    });
+    loading.present();
+  
     this.devices = [];
     this.isScanning = true;
     this.ble.startScan([]).subscribe(device => {
@@ -104,6 +120,7 @@ export class HomePage {
       console.log(JSON.stringify(this.devices))
       this.isScanning = false;
       this.connecting = true;
+      loading.dismiss();
     });
     }, 5000);
     
@@ -119,12 +136,18 @@ export class HomePage {
     }
 
     connectToDevice2(device) {
-      
+
+      let loading = this.loadingCtrl.create({
+        content: 'Connecting....'
+      });
+      loading.present();
+
     this.ble.connect(device.id).subscribe(peripheralData => {
       this.ngZone.run(() => {
         console.log('peripheralData');
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
+        loading.dismiss();
         alert('connected');
         this.connecting = false;     
       });

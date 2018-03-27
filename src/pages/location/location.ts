@@ -37,7 +37,7 @@ export class LocationPage {
     let loading = this.loadingCtrl.create({
       content: 'Please wait Map in Loading...'
     });
-    this.geolocation.getCurrentPosition().then((resp) => {
+    this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
   
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
@@ -46,10 +46,11 @@ export class LocationPage {
 
   this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
   .then((result: NativeGeocoderReverseResult) => {
+    loading.dismiss();
     console.log(result);
-    alert(JSON.stringify(result));
+    // alert(JSON.stringify(result));
     console.log(JSON.stringify(result));    
-    alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
+    // alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
   })
   .catch((error: any) => alert(error));
 
@@ -61,7 +62,6 @@ export class LocationPage {
     console.log(this.latitude);
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
       console.log('Map Is Ready....');
-        loading.dismiss();
         let position: CameraPosition<Object> = {
       target: latlng,
       zoom: 18,
