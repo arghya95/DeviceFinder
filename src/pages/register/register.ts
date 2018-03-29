@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { TabsPage } from '../tabs/tabs';
 
@@ -21,7 +21,7 @@ export class RegisterPage {
   public password: string;
   public mobile: string;
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, public navParams: NavParams) {
+  constructor(public loadingCtrl: LoadingController,public navCtrl: NavController, private alertCtrl: AlertController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -49,6 +49,11 @@ export class RegisterPage {
   //     this.showPopup("Error","Must be A Valid Email Address");
   // }
     else {
+      let loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
+      loading.present();
+
     firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
     .then(newUser => {
       firebase.database().ref('/userSummary').child(newUser.uid).set({
@@ -58,9 +63,11 @@ export class RegisterPage {
         mobile: this.mobile
       })
       console.log('registration successfull');
+      loading.dismiss();
       this.navCtrl.setRoot(TabsPage);
     })
      .catch(function (error) {
+      loading.dismiss();
        console.log(error);
      });
   }

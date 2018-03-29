@@ -3,6 +3,7 @@ import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
+import { LocationHistoryPage } from '../location-history/location-history';
 
 /**
  * Generated class for the LocationPage page.
@@ -37,6 +38,8 @@ export class LocationPage {
     let loading = this.loadingCtrl.create({
       content: 'Please wait Map in Loading...'
     });
+    loading.present();
+
     this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
   
       this.latitude = resp.coords.latitude;
@@ -52,7 +55,10 @@ export class LocationPage {
     console.log(JSON.stringify(result));    
     // alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
   })
-  .catch((error: any) => alert(error));
+  .catch((error: any) => {
+    loading.dismiss();
+    alert(error);
+  });
 
 
     let element = document.getElementById('map');
@@ -94,6 +100,10 @@ export class LocationPage {
        alert(error);
      });
     
+  }
+
+  goLocationHistory() {
+    this.navCtrl.push(LocationHistoryPage)
   }
 
 }

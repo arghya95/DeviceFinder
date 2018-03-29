@@ -5,6 +5,8 @@ import { DevicePage } from '../device/device';
 import { AboutPage } from '../about/about';
 import * as firebase from 'firebase';
 import { LoginPage } from '../login/login';
+import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 const LIGHTBULB_SERVICE = '1802';
@@ -19,8 +21,13 @@ export class HomePage {
   isScanning: boolean;
   characteristics: any;
   connecting: boolean;
-  constructor(private ngZone: NgZone,public loadingCtrl: LoadingController,public navCtrl: NavController,public navParams: NavParams,private ble: BLE,platform: Platform, public modalCtrl:ModalController) {
+  latitude: any;
+  longitude: any;
+  user_id: any;
+  time: any;
+  constructor(private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder,private ngZone: NgZone,public loadingCtrl: LoadingController,public navCtrl: NavController,public navParams: NavParams,private ble: BLE,platform: Platform, public modalCtrl:ModalController) {
     // this.devices = [];
+    this.user_id = firebase.auth().currentUser.uid;
 
     let loading = this.loadingCtrl.create({
       content: 'Please wait Scanning in Progress...'
@@ -152,6 +159,39 @@ export class HomePage {
         this.connecting = false;     
       });
   
+      this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
+        // alert(resp.timestamp)
+        // this.timeConverter(resp.timestamp);
+        this.getTime()
+        this.latitude = resp.coords.latitude;
+        this.longitude = resp.coords.longitude;
+        console.log(this.latitude);
+        
+  
+    this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
+    .then((result: NativeGeocoderReverseResult) => {
+      loading.dismiss();
+      console.log(result);
+      // alert(JSON.stringify(result));
+      console.log(JSON.stringify(result));
+      firebase.database().ref('/userSummary/'+this.user_id).push({
+        latitude: this.latitude,
+        longitude: this.longitude,
+        location: JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'),
+        time: this.time
+      })    
+      // alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
+    })
+    .catch((error: any) => {
+      loading.dismiss();
+      alert(error);
+    });
+
+  }).catch((error) => {
+    console.log('Error getting location', error);
+    alert(error);
+  });
+
       },
       peripheralData => {
       this.connecting = false;
@@ -187,6 +227,30 @@ export class HomePage {
     firebase.auth().signOut();
     this.navCtrl.setRoot(LoginPage);
     })
+    }
+
+    getTime() {
+      var currentdate = new Date(); 
+      this.time = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+                return this.time;
+    }
+
+   timeConverter(UNIX_timestamp){
+      var a = new Date(UNIX_timestamp * 1000);
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var year = a.getFullYear();
+      var month = months[a.getMonth()];
+      var date = a.getDate();
+      var hour = a.getHours();
+      var min = a.getMinutes();
+      var sec = a.getSeconds();
+      this.time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+      return this.time;
     }
 
 

@@ -24,6 +24,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LoginPage } from '../pages/login/login';
 import * as firebase from 'firebase';
 import { RegisterPage } from '../pages/register/register';
+import { LocationHistoryPage } from '../pages/location-history/location-history';
 // import { Firebase } from '@ionic-native/firebase';
  // Initialize Firebase
  var config = {
@@ -48,7 +49,8 @@ firebase.initializeApp(config);
     ScanPage,
     DevicePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    LocationHistoryPage
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,8 @@ firebase.initializeApp(config);
     ScanPage,
     DevicePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    LocationHistoryPage
   ],
   providers: [
     StatusBar,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { TabsPage } from '../tabs/tabs';
 import { RegisterPage } from '../register/register';
@@ -18,7 +18,7 @@ export class LoginPage {
   public email: any;
   public password: any;
 
-  constructor(public alertCtrl: AlertController,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public loadingCtrl: LoadingController,public alertCtrl: AlertController,public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -32,14 +32,21 @@ export class LoginPage {
       this.showPopup("Error","Password Cannot be blank");
     }
     else {
+      let loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
+      loading.present();
+      
     return firebase.auth().signInWithEmailAndPassword(this.email, this.password)
      .then(user => {
        console.log(this.email);
        if(user) {
+         loading.dismiss();
          this.navCtrl.setRoot(TabsPage);
        }
      })
       .catch((_error) => {
+        loading.dismiss();
         alert(_error.message);
       });
     }

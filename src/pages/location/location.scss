@@ -2,10 +2,19 @@ page-location {
     #map { 
         height: 100%;
         position: relative;
+        margin: 0px;
     }
     #map:after {
         display: block;
         position: absolute;
+        margin: 0px;
+    }
+
+    .button{
+        position: absolute;
+        bottom: 0px;
+        margin-left: 25%;
+        // margin-bottom: 10%
     }
 
 }

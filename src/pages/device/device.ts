@@ -26,7 +26,7 @@ export class DevicePage {
   bleRssi: any;
   deviceRssi: number = -100;
   searchClick: any;
-
+  value: any;
 
   constructor(private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
@@ -43,6 +43,7 @@ export class DevicePage {
         this.characteristics = [];
         
         this.ble.connect(deviceID).subscribe(peripheralData => {
+        this.searchClick = true;
         console.log('peripheralData');
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
@@ -65,7 +66,7 @@ export class DevicePage {
         },
         peripheralData => {
         this.connecting = false;
-
+        this.searchClick = true;
 
         let value = 2;
         let buffer = new Uint8Array([value]).buffer;
@@ -149,13 +150,13 @@ connectToCharacteristic(deviceID,characteristic) {
     }
     searchPeripheral(deviceID){
       this.ngZone.run(() => {
-        let value = 2;
-        let buffer = new Uint8Array([value]).buffer;
+        this.value = 2;
+        let buffer = new Uint8Array([this.value]).buffer;
 
         // setTimeout(() => {
-        this.ble.write(deviceID,LINKLOSS_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        this.ble.write(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
-          alert('high alert..'+value);
+          // alert('high alert..'+value);
           this.searchClick = false;
         })
         .catch((e)=>{
@@ -168,8 +169,8 @@ connectToCharacteristic(deviceID,characteristic) {
     }
     stopSearch(deviceID) {
       this.ngZone.run(() => {
-        let value = 0;
-        let buffer = new Uint8Array([value]).buffer;
+        this.value = 2;
+        let buffer = new Uint8Array([this.value]).buffer;
         this.ble.write(deviceID,LINKLOSS_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
           alert('high alert..'+value);
