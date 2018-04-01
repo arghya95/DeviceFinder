@@ -16,7 +16,7 @@ export class LocationHistoryPage {
   items: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     var user = firebase.auth().currentUser;
-    let selfRef = firebase.database().ref('/userPost');
+    let selfRef = firebase.database().ref('/userSummary'+user);
     console.log(selfRef);
     selfRef.on('value',(snapuser:any)=>{
       if(snapuser.val()){

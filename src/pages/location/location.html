@@ -14,8 +14,19 @@
 
 
 <ion-content padding>
-    <div #map id="map"></div>
-    <div>
-      <button ion-button outline color='danger' (click)='goLocationHistory()' class="button">Location History</button>
-    </div>    
+    <div id="map">
+        
+    <!-- <div>
+      <button ion-button outline color='danger' (click)='goLocationHistory()' class="button">Location History</button> -->
+    </div> 
+    <ion-footer>
+      <ion-row>
+        <ion-col>
+          <button ion-button outline color="danger" (click)='goLocationHistory()'>Location History</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button outline color="danger" (click)="goLocationHistory()">Lost History</button>
+        </ion-col>
+      </ion-row>
+    </ion-footer>   
 </ion-content>

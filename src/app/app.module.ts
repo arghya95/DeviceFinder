@@ -25,6 +25,9 @@ import { LoginPage } from '../pages/login/login';
 import * as firebase from 'firebase';
 import { RegisterPage } from '../pages/register/register';
 import { LocationHistoryPage } from '../pages/location-history/location-history';
+import { TermsandConditionsPage } from '../pages/termsand-conditions/termsand-conditions';
+import { HelpPage } from '../pages/help/help';
+import { DocumentViewer } from '@ionic-native/document-viewer';
 // import { Firebase } from '@ionic-native/firebase';
  // Initialize Firebase
  var config = {
@@ -50,7 +53,9 @@ firebase.initializeApp(config);
     DevicePage,
     LoginPage,
     RegisterPage,
-    LocationHistoryPage
+    LocationHistoryPage,
+    TermsandConditionsPage,
+    HelpPage
   ],
   imports: [
     BrowserModule,
@@ -69,7 +74,9 @@ firebase.initializeApp(config);
     DevicePage,
     LoginPage,
     RegisterPage,
-    LocationHistoryPage
+    LocationHistoryPage,
+    TermsandConditionsPage,
+    HelpPage
   ],
   providers: [
     StatusBar,
@@ -81,6 +88,7 @@ firebase.initializeApp(config);
     Diagnostic,
     LocationAccuracy,
     NativeGeocoder,
+    DocumentViewer,
     // Firebase,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

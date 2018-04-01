@@ -49,7 +49,7 @@ export class LocationPage {
 
   this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
   .then((result: NativeGeocoderReverseResult) => {
-    loading.dismiss();
+    
     console.log(result);
     // alert(JSON.stringify(result));
     console.log(JSON.stringify(result));    
@@ -68,7 +68,9 @@ export class LocationPage {
     console.log(this.latitude);
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
       console.log('Map Is Ready....');
-        let position: CameraPosition<Object> = {
+      loading.dismiss();
+
+      let position: CameraPosition<Object> = {
       target: latlng,
       zoom: 18,
       tilt: 30
@@ -98,6 +100,7 @@ export class LocationPage {
      }).catch((error) => {
        console.log('Error getting location', error);
        alert(error);
+       loading.dismiss();
      });
     
   }

@@ -9,6 +9,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import * as firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
+import { SettingPage } from '../pages/setting/setting';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,7 +30,7 @@ export class MyApp {
       splashScreen.hide();
 
       let loading = this.loadingCtrl.create({
-        content: 'Please wait Map in Loading...'
+        content: 'Authenticating...'
       });
       loading.present();
 
@@ -43,12 +44,11 @@ export class MyApp {
             //   .catch(error => console.error('Error getting token', error));
             loading.dismiss()
             this.rootPage=TabsPage;
-          // this.rootPage = StaffratingPage;
           })
         }else{
           this.zone.run(()=>{
             loading.dismiss();
-            this.rootPage=LoginPage;
+            this.rootPage=SettingPage;
           })
         }
     });

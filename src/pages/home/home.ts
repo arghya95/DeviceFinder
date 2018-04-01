@@ -53,20 +53,20 @@ export class HomePage {
         });
       });
       
-      setTimeout(() => {
+    setTimeout(() => {
         this.ble.stopScan().then(() => {
-          this.ngZone.run(() => {
+
+        this.ngZone.run(() => {
         console.log('Scanning has stopped');
         console.log(JSON.stringify(this.devices))
         this.isScanning = false;
         loading.dismiss();
         this.connecting = true;
-          });
+        });
       });
-      }, 5000);
+    }, 5000);
 
-
-      })
+  })
       .catch(()=>{
         this.ble.enable().then(()=>{
           console.log('bluetooth enabling....');
@@ -174,10 +174,11 @@ export class HomePage {
       console.log(result);
       // alert(JSON.stringify(result));
       console.log(JSON.stringify(result));
+      var location = (result[0].thoroughfare ? result[0].subLocality : '')+', ' +result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
       firebase.database().ref('/userSummary/'+this.user_id).push({
         latitude: this.latitude,
         longitude: this.longitude,
-        location: JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'),
+        location: location,
         time: this.time
       })    
       // alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
