@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import { LoginPage } from '../login/login';
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 import { Geolocation } from '@ionic-native/geolocation';
+import { TabsPage } from '../tabs/tabs';
 
 
 const LIGHTBULB_SERVICE = '1802';
@@ -172,16 +173,14 @@ export class HomePage {
     .then((result: NativeGeocoderReverseResult) => {
       loading.dismiss();
       console.log(result);
-      // alert(JSON.stringify(result));
       console.log(JSON.stringify(result));
-      var location = (result[0].thoroughfare ? result[0].subLocality : '')+', ' +result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
-      firebase.database().ref('/userSummary/'+this.user_id).push({
+      var location = (result[0].thoroughfare ? (result[0].subLocality+', ') : '') + result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
+      firebase.database().ref('/userSummary/'+this.user_id+'/location-history/').push({
         latitude: this.latitude,
         longitude: this.longitude,
         location: location,
         time: this.time
       })    
-      // alert(JSON.stringify(result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'))
     })
     .catch((error: any) => {
       loading.dismiss();
@@ -204,11 +203,38 @@ export class HomePage {
       .then((value)=>{
         alert('high alert..'+value);
       })
-      .catch(()=>{
-        alert('error');
+      .catch((e)=>{
+        alert(e);
       })
+//lost history code start
+      this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
+        this.getTime()
+        this.latitude = resp.coords.latitude;
+        this.longitude = resp.coords.longitude;
+        console.log(this.latitude);
+        
+  
+    this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
+    .then((result: NativeGeocoderReverseResult) => {
+      console.log(result);
+      console.log(JSON.stringify(result));
+      var location = (result[0].thoroughfare ? (result[0].subLocality+', ') : '') + result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
+      firebase.database().ref('/userSummary/'+this.user_id+'/lost-history/').push({
+        latitude: this.latitude,
+        longitude: this.longitude,
+        location: location,
+        time: this.time
+      })    
+    })
+    .catch((error: any) => {
+      alert(error);
+    });
 
-
+  }).catch((error) => {
+    console.log('Error getting location', error);
+    alert(error);
+  });
+  //end lost history
       console.log('disconnected');
       alert('disconnected');
       });
@@ -240,19 +266,4 @@ export class HomePage {
                 + currentdate.getSeconds();
                 return this.time;
     }
-
-   timeConverter(UNIX_timestamp){
-      var a = new Date(UNIX_timestamp * 1000);
-      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var year = a.getFullYear();
-      var month = months[a.getMonth()];
-      var date = a.getDate();
-      var hour = a.getHours();
-      var min = a.getMinutes();
-      var sec = a.getSeconds();
-      this.time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-      return this.time;
-    }
-
-
 }

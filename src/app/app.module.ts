@@ -28,6 +28,7 @@ import { LocationHistoryPage } from '../pages/location-history/location-history'
 import { TermsandConditionsPage } from '../pages/termsand-conditions/termsand-conditions';
 import { HelpPage } from '../pages/help/help';
 import { DocumentViewer } from '@ionic-native/document-viewer';
+import { LostHistoryPage } from '../pages/lost-history/lost-history';
 // import { Firebase } from '@ionic-native/firebase';
  // Initialize Firebase
  var config = {
@@ -55,7 +56,8 @@ firebase.initializeApp(config);
     RegisterPage,
     LocationHistoryPage,
     TermsandConditionsPage,
-    HelpPage
+    HelpPage,
+    LostHistoryPage
   ],
   imports: [
     BrowserModule,
@@ -76,7 +78,8 @@ firebase.initializeApp(config);
     RegisterPage,
     LocationHistoryPage,
     TermsandConditionsPage,
-    HelpPage
+    HelpPage,
+    LostHistoryPage
   ],
   providers: [
     StatusBar,

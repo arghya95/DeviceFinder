@@ -1,6 +1,6 @@
 <ion-header class="ion-nav">
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title><span text-color="my-custom-color">Home</span></ion-title>
     <ion-buttons end>
     <button class="logout" ion-button (click)='logoutClick()' icon-start>
         <ion-icon name='md-log-out'></ion-icon>
@@ -10,8 +10,12 @@
 </ion-header>
 
 <ion-content padding>
-  <h1>Click here to Scan</h1>
-  <button ion-button (click)="startScanning()">Scan</button>
+  <ion-row>
+    <ion-col style="text-align: center">
+      <h1>Click here to Re-Scan</h1>
+      <button ion-button (click)="startScanning()">Re-Scan</button>
+  </ion-col>
+  </ion-row>
   <ion-list inset>
     <ion-item-sliding *ngFor='let device of devices' #slidingItem>
       <button ion-item (click)='connectToDevice1(device)' style="border:1px solid '#000'">

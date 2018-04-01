@@ -9,7 +9,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import * as firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
-import { SettingPage } from '../pages/setting/setting';
+import { LocationHistoryPage } from '../pages/location-history/location-history';
 
 @Component({
   templateUrl: 'app.html'
@@ -48,7 +48,7 @@ export class MyApp {
         }else{
           this.zone.run(()=>{
             loading.dismiss();
-            this.rootPage=SettingPage;
+            this.rootPage=LoginPage;
           })
         }
     });

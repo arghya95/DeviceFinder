@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, GoogleMapsAnimation } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 import { LocationHistoryPage } from '../location-history/location-history';
+import { LostHistoryPage } from '../lost-history/lost-history';
 
 /**
  * Generated class for the LocationPage page.
@@ -21,7 +22,7 @@ export class LocationPage {
   latitude: any;
   longitude: any;
   // loading: any;
-  constructor(public navCtrl: NavController,public loadingCtrl: LoadingController,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public navParams: NavParams, private googleMaps: GoogleMaps) {
+  constructor(private ngZone: NgZone,public navCtrl: NavController,public loadingCtrl: LoadingController,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public navParams: NavParams, private googleMaps: GoogleMaps) {
     
     
 
@@ -40,12 +41,12 @@ export class LocationPage {
     });
     loading.present();
 
+  this.ngZone.run(()=>{
     this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
   
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
-      console.log(this.latitude);
-      
+      console.log(this.latitude);  
 
   this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
   .then((result: NativeGeocoderReverseResult) => {
@@ -96,17 +97,20 @@ export class LocationPage {
           
     });
 
-
      }).catch((error) => {
        console.log('Error getting location', error);
        alert(error);
        loading.dismiss();
      });
+    })
     
   }
 
   goLocationHistory() {
     this.navCtrl.push(LocationHistoryPage)
+  }
+  goLostHistory() {
+    this.navCtrl.push(LostHistoryPage)
   }
 
 }

@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>LocationHistory</ion-title>
+    <ion-title><span text-color="my-custom-color">Location History</span></ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -17,13 +17,13 @@
   <ion-card *ngFor='let item of items'>
 
     <ion-card-header>
-      {{item.time}}
+      Connection Time: {{item.time}}
     </ion-card-header>
   
     <ion-card-content>
-      <p>Latitude: {{item.latitude}}</p>
-      <p>Longitude: {{item.longitude}}</p>
-      <p>Location:{{item.location}}</p>
+      <p>Latitude:  {{item.latitude}}</p>
+      <p>Longitude:  {{item.longitude}}</p>
+      <p>Location:  {{item.location}}</p>
     </ion-card-content>
   
   </ion-card>

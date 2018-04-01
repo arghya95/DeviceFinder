@@ -2,7 +2,11 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { TabsPage } from '../tabs/tabs';
+import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 
+import * as firebase from 'firebase';
 /**
  * Generated class for the DevicePage page.
  *
@@ -27,11 +31,16 @@ export class DevicePage {
   deviceRssi: number = -100;
   searchClick: any;
   value: any;
+  latitude: any;
+  longitude: any;
+  user_id: any;
+  time: any;
 
-  constructor(private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
+  constructor( private nativeGeocoder: NativeGeocoder,private geolocation: Geolocation,private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
     this.searchClick = true;
+    this.user_id = firebase.auth().currentUser.uid;
   }
 
   ionViewDidLoad() {
@@ -77,10 +86,39 @@ export class DevicePage {
         .catch((e)=>{
           alert(e);
         })
-
+//lost history code start
+        this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
+          this.getTime()
+          this.latitude = resp.coords.latitude;
+          this.longitude = resp.coords.longitude;
+          console.log(this.latitude);
+          
+    
+      this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
+      .then((result: NativeGeocoderReverseResult) => {
+        console.log(result);
+        console.log(JSON.stringify(result));
+        var location = (result[0].thoroughfare ? (result[0].subLocality+', ') : '') + result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
+        firebase.database().ref('/userSummary/'+this.user_id+'/lost-history/').push({
+          latitude: this.latitude,
+          longitude: this.longitude,
+          location: location,
+          time: this.time
+        })    
+      })
+      .catch((error: any) => {
+        alert(error);
+      });
+  
+    }).catch((error) => {
+      console.log('Error getting location', error);
+      alert(error);
+    });
+    //lost history end
 
         console.log('disconnected');
         alert('disconnected');
+        this.navCtrl.setRoot(TabsPage);
         });
     }
 
@@ -181,6 +219,17 @@ connectToCharacteristic(deviceID,characteristic) {
           this.searchClick = false;
         })
       })
+    }
+
+    getTime() {
+      var currentdate = new Date(); 
+      this.time = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+                return this.time;
     }
 
 }

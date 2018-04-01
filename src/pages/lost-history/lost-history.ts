@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import * as firebase from 'firebase';
 /**
- * Generated class for the LocationHistoryPage page.
+ * Generated class for the LostHistoryPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 
 @Component({
-  selector: 'page-location-history',
-  templateUrl: 'location-history.html',
+  selector: 'page-lost-history',
+  templateUrl: 'lost-history.html',
 })
-export class LocationHistoryPage {
+export class LostHistoryPage {
   items: any;
   constructor(public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
     let loading = this.loadingCtrl.create({
@@ -22,7 +22,7 @@ export class LocationHistoryPage {
 
     var user = firebase.auth().currentUser.uid;
     console.log(firebase.auth().currentUser.uid);
-    let selfRef = firebase.database().ref('/userSummary/'+user+'/location-history/');
+    let selfRef = firebase.database().ref('/userSummary/'+user+'/lost-history/');
     selfRef.on('value',(snapuser:any)=>{
       if(snapuser.val()){
         let details = snapuser.val();
@@ -37,7 +37,7 @@ export class LocationHistoryPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LocationHistoryPage');
+    console.log('ionViewDidLoad LostHistoryPage');
   }
 
 }
