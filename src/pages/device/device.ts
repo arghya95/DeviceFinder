@@ -23,6 +23,7 @@ const LINKLOSS_SERVICE = '1803';
   templateUrl: 'device.html',
 })
 export class DevicePage {
+  
   device: any;
   connecting: boolean;
   characteristics: any;
@@ -56,6 +57,7 @@ export class DevicePage {
         console.log('peripheralData');
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
+        
         /*
         this.ble.read(deviceID, LIGHTBULB_SERVICE, SWITCH_CHARACTERISTIC).then(
           buffer => {
@@ -71,6 +73,7 @@ export class DevicePage {
           alert('not found');
         })
         */
+       
         this.connecting = false;
         },
         peripheralData => {
@@ -85,6 +88,7 @@ export class DevicePage {
         })
         .catch((e)=>{
           alert(e);
+          this.navCtrl.setRoot(TabsPage);
         })
 //lost history code start
         this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
@@ -136,7 +140,7 @@ export class DevicePage {
           // alert('high alert..'+value);
           this.localNotifications.schedule({
             id: 1,
-            text: 'Your Device is Lost',
+            text: 'Your Device is Out of Range',
             sound: 'file://audio/alarm2.mp3'
            });
         })
@@ -154,7 +158,7 @@ export class DevicePage {
       // Schedule a single notification
       this.localNotifications.schedule({
        id: 1,
-       text: 'Your Device is Lost',
+       text: 'Your Device is Out of Range',
        sound: 'file://audio/alarm2.mp3'
       });
       }
@@ -173,6 +177,7 @@ connectToCharacteristic(deviceID,characteristic) {
       })
       .catch((e)=>{
         alert(e);
+        this.navCtrl.setRoot(TabsPage);
       })
     }
     else if(characteristic.service=='ffe0') {
@@ -229,7 +234,7 @@ connectToCharacteristic(deviceID,characteristic) {
                 + currentdate.getHours() + ":"  
                 + currentdate.getMinutes() + ":" 
                 + currentdate.getSeconds();
-                return this.time;
+      return this.time;
     }
 
 }

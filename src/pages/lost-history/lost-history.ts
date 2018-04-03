@@ -31,6 +31,7 @@ export class LostHistoryPage {
         details[key].uid = key;
         this.items.push(details[key])
       }
+      this.items.reverse();
     }
   });
   loading.dismiss();        

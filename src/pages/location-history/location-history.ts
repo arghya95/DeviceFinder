@@ -26,11 +26,14 @@ export class LocationHistoryPage {
     selfRef.on('value',(snapuser:any)=>{
       if(snapuser.val()){
         let details = snapuser.val();
-        this.items = []; 
+        this.items = [];
+        // var arr = [] 
       for(let key in details) {
         details[key].uid = key;
-        this.items.push(details[key])
+        // arr.push(details[key])
+        this.items.push(details[key]);
       }
+      this.items.reverse();
     }
   });
   loading.dismiss();        

@@ -1,28 +1,28 @@
 page-register {
-    [text-color="my-custom-color"] {
-        color: rgb(129, 9, 99);
-    }
+ 
 
    ion-content{
-// background-image: url('../assets/imgs/splash.png');
-background-color: rgb(102, 238, 11) !important;
-ion-list{
-background: #fff;
-ion-item{
-    background: #fff !important; 
+    background-image: url('../../assets/imgs/location.jpg');
+    height: 100%;
+    background-size: 100%;
+    z-index: 1;
+     /*   ion-list{
+        background: #fff;
+        ion-item{
+            background: #fff !important; 
 
-ion-input{
-    // border: 1px solid #ccc;
-    // background: rgb(102, 238, 11) !important; 
-    border-radius: 6px;
-    flex: none;
-    // width: 300px;
-    input{
-        padding-left: 20px;
-    }
-}
-}
-}
+        ion-input{
+            // border: 1px solid #ccc;
+            // background: rgb(102, 238, 11) !important; 
+            border-radius: 6px;
+            flex: none;
+            // width: 300px;
+            input{
+                padding-left: 20px;
+            }
+        }
+        }
+        }*/
 }
 
 ion-item.item-md.item-input.input-has-focus .item-inner,
@@ -30,5 +30,18 @@ ion-item.item-md.item-input.ng-valid.input-has-value:not(.input-has-focus) .item
 ion-item.item-md.item-input.ng-invalid.ng-touched:not(.input-has-focus) .item-inner {
     border-bottom-color: #000;
     box-shadow: none;
+}
+.item.item-input {
+    background-color: #fff;
+    opacity: 0.4;
+}
+.item-input-has-focus .label-md[floating], .input-has-focus .label-md[floating]{
+    color: black; //label color when focusing
+}
+.item-input .label-md{
+    color: black; //label color
+}
+h4{
+    color: snow
 }
 }

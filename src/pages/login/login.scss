@@ -1,17 +1,34 @@
 
     page-login {
-        [text-color="my-custom-color"] {
-            color: rgb(129, 9, 99);
-        }
+     
 
        ion-content{
-    // background-image: url('../assets/imgs/splash.png');
-    background-color: rgb(102, 238, 11) !important
+    background-image: url('../../assets/imgs/location.jpg');
+    height: 100%;
+    background-size: 100%;
+    // height: 1200px;
+    z-index: 1;
+    // background-color: rgb(102, 238, 11) !important
    
+}
+h4{
+    color: snow
 }
 
 .loginFooter{
-    color: rgb(72, 3, 233);
+    color: rgb(240, 239, 243);
     font-size:14px !important;
 }
+.item.item-input {
+    background-color: #fff;
+    opacity: 0.4;
+}
+.item-input-has-focus .label-md[floating], .input-has-focus .label-md[floating]{
+    color: black; //label color when focusing
+}
+.item-input .label-md{
+    color: black; //label color
+}
+
+
 }

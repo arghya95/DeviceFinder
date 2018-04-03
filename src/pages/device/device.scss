@@ -1,3 +1,38 @@
 page-device {
-
+    ion-content{
+        background-image: url('../../assets/imgs/back.jpg');
+        height: 100%;
+        background-size: 100%;
+        z-index: 1;
+    }
+    .range-md .range-slider {
+        height: 42px;
+        // background-color: turquoise
+    }
+    .item-md {
+  
+        background-color: transparent;
+        // opacity: 0.3;
+        
+    }
+    .item-range ion-range ion-label {
+       color: #fff
+    }
+    .list-md .item-block .item-inner {
+        border-bottom: 1px solid #dedede;
+        height: 100px;
+    }
+    h1{
+        color: #fff
+    }
+    .button-md {
+        border-radius: 2px;
+        overflow: hidden;
+        height: 3.6rem;
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #fff;
+        background-color: #194fec;
+    }
 }
