@@ -47,6 +47,21 @@
       
       
     </ion-list>
+    <ion-list>
+      <ion-row  style="text-align: center">
+        <ion-col>
+          <!-- <h2 style="color:rgb(20, 228, 13)">Click to Search Your BLE Device</h2> -->
+          <!-- <ion-item> -->
+            <ion-label style="color:#fff; text-align: center;font-size: 20px">Do Not Disturb Mode</ion-label>
+            </ion-col>
+            <ion-col>
+            <ion-toggle color="secondary" (ionChange)="notify()" [checked]="isToggled" [(ngModel)]='isToggled' ></ion-toggle>
+          <!-- </ion-item> -->
+        </ion-col>
+      </ion-row>
+      
+      
+    </ion-list>
     <!-- <ion-list inset>
       <ion-item-sliding *ngFor='let characteristic of characteristics' #slidingItem>
         <button ion-item (click)="connectToCharacteristic(device.id,characteristic)">

@@ -8,6 +8,7 @@ import { LoginPage } from '../login/login';
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 import { Geolocation } from '@ionic-native/geolocation';
 import { TabsPage } from '../tabs/tabs';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 
 const LIGHTBULB_SERVICE = '1802';
@@ -26,7 +27,7 @@ export class HomePage {
   longitude: any;
   user_id: any;
   time: any;
-  constructor(private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder,private ngZone: NgZone,public loadingCtrl: LoadingController,public navCtrl: NavController,public navParams: NavParams,private ble: BLE,platform: Platform, public modalCtrl:ModalController) {
+  constructor(private localNotifications: LocalNotifications,private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder,private ngZone: NgZone,public loadingCtrl: LoadingController,public navCtrl: NavController,public navParams: NavParams,private ble: BLE,platform: Platform, public modalCtrl:ModalController) {
     // this.devices = [];
     this.user_id = firebase.auth().currentUser.uid;
 
@@ -156,7 +157,7 @@ export class HomePage {
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
         loading.dismiss();
-        alert('connected');
+        // alert('connected');
         this.connecting = false;     
       });
   
@@ -195,13 +196,13 @@ export class HomePage {
       },
       peripheralData => {
       this.connecting = false;
-
+      loading.dismiss()
 
       let value = 2;
       let buffer = new Uint8Array([value]).buffer;
       this.ble.writeWithoutResponse(device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
       .then((value)=>{
-        alert('high alert..'+value);
+        // alert('high alert..'+value);
       })
       .catch((e)=>{
         alert(e);
@@ -237,6 +238,13 @@ export class HomePage {
   //end lost history
       console.log('disconnected');
       alert('disconnected');
+
+      this.localNotifications.schedule({
+        id: 1,
+        text: 'Your Wallet is Disconnected',
+        sound: 'file://audio/alarm2.mp3'
+       });
+
       });
     }
 

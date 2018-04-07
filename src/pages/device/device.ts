@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, NgZone, SimpleChanges } from '@angular/core';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { TabsPage } from '../tabs/tabs';
@@ -36,17 +36,22 @@ export class DevicePage {
   longitude: any;
   user_id: any;
   time: any;
+  isToggled: boolean;
 
-  constructor( private nativeGeocoder: NativeGeocoder,private geolocation: Geolocation,private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
+  constructor( public alertCtrl: AlertController,private nativeGeocoder: NativeGeocoder,private geolocation: Geolocation,private ngZone: NgZone,public navCtrl: NavController,private localNotifications: LocalNotifications,public zone: NgZone,public navParams: NavParams,private ble: BLE) {
     this.device = this.navParams.get('device');
     this.connecting = true;
     this.searchClick = true;
     this.user_id = firebase.auth().currentUser.uid;
+    this.isToggled = false
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DevicePage');
     this.connect(this.device.id);
+  }
+  notify() {
+    // alert("toggled: "+ this.isToggled); 
   }
  
   connect(deviceID) {
@@ -77,6 +82,7 @@ export class DevicePage {
         this.connecting = false;
         },
         peripheralData => {
+this.navCtrl.setRoot(TabsPage)
         this.connecting = false;
         this.searchClick = true;
 
@@ -84,7 +90,14 @@ export class DevicePage {
         let buffer = new Uint8Array([value]).buffer;
         this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
-          alert('high alert..'+value);
+          // alert('high alert..'+value);
+            // alert('high alert..'+value);
+            this.localNotifications.schedule({
+              id: 1,
+              text: 'Your Wallet is Disconnected',
+              sound: 'file://audio/alarm2.mp3'
+             });
+           
         })
         .catch((e)=>{
           alert(e);
@@ -93,7 +106,7 @@ export class DevicePage {
 //lost history code start
         this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
           this.getTime()
-          this.latitude = resp.coords.latitude;
+          this. latitude = resp.coords.latitude;
           this.longitude = resp.coords.longitude;
           console.log(this.latitude);
           
@@ -122,7 +135,14 @@ export class DevicePage {
 
         console.log('disconnected');
         alert('disconnected');
-        this.navCtrl.setRoot(TabsPage);
+
+        this.localNotifications.schedule({
+          id: 1,
+          text: 'Your Wallet is Disconnected',
+          sound: 'file://audio/alarm2.mp3'
+         });
+
+        
         });
     }
 
@@ -132,7 +152,7 @@ export class DevicePage {
       .then((rssi)=>{
         this.bleRssi = rssi;
       })
-      if(this.bleRssi<this.deviceRssi) {
+      if(this.bleRssi<this.deviceRssi && this.isToggled == false) {
         let value = 2;
         let buffer = new Uint8Array([value]).buffer;
         this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
@@ -140,7 +160,7 @@ export class DevicePage {
           // alert('high alert..'+value);
           this.localNotifications.schedule({
             id: 1,
-            text: 'Your Device is Out of Range',
+            text: 'Your Wallet is Out of Range',
             sound: 'file://audio/alarm2.mp3'
            });
         })
@@ -149,18 +169,63 @@ export class DevicePage {
         })
         
       }
-     
-      
+/*
+      this.ble.isConnected(this.device.id)
+      .then(
+        (connectData)=>{},
+        (connectData)=>{
+          // alert(connectData)
+          let value = 2;
+          let buffer = new Uint8Array([value]).buffer;
+          this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+          .then((value)=>{
+            this.localNotifications.schedule({
+              id: 1,
+              text: 'Your Wallet is Disconnected',
+              sound: 'file://audio/alarm2.mp3'
+             });
+          })
+          .catch((e)=>{
+          })
+        }
+      )
+      .catch((e)=>{alert("connecton error "+e)});
+ */
+    }
+    ngOnChanges(changes:SimpleChanges) {
+      if(this.bleRssi>this.deviceRssi && this.isToggled == false) {
+        let value = 0;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+          // alert('high alert..'+value);
+         
+        })
+        .catch((e)=>{
+          // alert(e);
+        })
+        
+      }
     }
 
 
     public schedule() {
       // Schedule a single notification
+      if(this.isToggled == true) {
       this.localNotifications.schedule({
        id: 1,
        text: 'Your Device is Out of Range',
        sound: 'file://audio/alarm2.mp3'
       });
+      }
+      else{
+        let alert = this.alertCtrl.create({
+          title: 'Attention',
+          subTitle: 'Do not Disturb Mode is Off on Your Device',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
       }
 
 connectToCharacteristic(deviceID,characteristic) {
@@ -193,6 +258,7 @@ connectToCharacteristic(deviceID,characteristic) {
     }
     searchPeripheral(deviceID){
       this.ngZone.run(() => {
+        if(this.isToggled==false){
         this.value = 2;
         let buffer = new Uint8Array([this.value]).buffer;
 
@@ -206,17 +272,26 @@ connectToCharacteristic(deviceID,characteristic) {
           alert('search device error'+e);
           this.searchClick = true;
         })
+      }
+      else{
+        let alert = this.alertCtrl.create({
+          title: 'Attention',
+          subTitle: 'Do not Disturb Mode is Off on Your Device.Please Turn On and Try Again',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
       // }, 50000);
 
       })
     }
     stopSearch(deviceID) {
       this.ngZone.run(() => {
-        this.value = 2;
+        this.value = 0;
         let buffer = new Uint8Array([this.value]).buffer;
-        this.ble.write(deviceID,LINKLOSS_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        this.ble.write(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
-          alert('high alert..'+value);
+          // alert('high alert..'+value);
           this.searchClick = true;
         })
         .catch((e)=>{
