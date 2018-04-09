@@ -29,6 +29,8 @@ import { TermsandConditionsPage } from '../pages/termsand-conditions/termsand-co
 import { HelpPage } from '../pages/help/help';
 import { DocumentViewer } from '@ionic-native/document-viewer';
 import { LostHistoryPage } from '../pages/lost-history/lost-history';
+import { BackgroundMode } from '@ionic-native/background-mode';
+
 // import { Firebase } from '@ionic-native/firebase';
  // Initialize Firebase
  var config = {
@@ -92,6 +94,7 @@ firebase.initializeApp(config);
     LocationAccuracy,
     NativeGeocoder,
     DocumentViewer,
+    BackgroundMode,
     // Firebase,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

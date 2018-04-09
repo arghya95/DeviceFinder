@@ -8,13 +8,18 @@
 
     <ion-navbar>
       <ion-title><span text-color="my-custom-color">Lost History</span></ion-title>
+      <ion-buttons end>
+        <button class="clearAll" ion-button (click)='clearAllHistory()' icon-start>
+            <ion-icon name='trash'></ion-icon>
+            Clear All</button>
+      </ion-buttons>
     </ion-navbar>
   
   </ion-header>
   
   
   <ion-content padding>
-    <ion-card *ngFor='let item of items'>
+    <ion-card *ngFor='let item of items; let i=index;'>
   
       <ion-card-header>
         Connection Time: {{item.time}}
@@ -25,6 +30,9 @@
         <p>Longitude:  {{item.longitude}}</p>
         <p>Location:  {{item.location}}</p>
       </ion-card-content>
+      <ion-item icon-only (click)="onDeletePost(i)"> 
+        <ion-icon item-right name="trash"></ion-icon>
+      </ion-item>
     
     </ion-card>
   </ion-content>

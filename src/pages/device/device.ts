@@ -29,7 +29,7 @@ export class DevicePage {
   characteristics: any;
   power: any;
   bleRssi: any;
-  deviceRssi: number = -100;
+  deviceRssi: number;
   searchClick: any;
   value: any;
   latitude: any;
@@ -43,13 +43,55 @@ export class DevicePage {
     this.connecting = true;
     this.searchClick = true;
     this.user_id = firebase.auth().currentUser.uid;
-    this.isToggled = false
+    this.isToggled = false;
+    this.deviceRssi = -100;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DevicePage');
     this.connect(this.device.id);
+
+
+    this.ble.readRSSI(this.device.id)
+    .then((rssi)=>{
+      this.bleRssi = rssi;
+    })
+    if(this.bleRssi<this.deviceRssi && this.isToggled == false) {
+      let value = 2;
+      let buffer = new Uint8Array([value]).buffer;
+      this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      .then((value)=>{
+        // alert('high alert..'+value);
+        this.localNotifications.schedule({
+          id: 1,
+          text: 'Your Wallet is Out of Range',
+          sound: 'file://audio/alarm2.mp3'
+         });
+      })
+      .catch((e)=>{
+        // alert(e);
+      })
+      
+    }
+    else {
+
+      let value = 0;
+      let buffer = new Uint8Array([value]).buffer;
+      this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+      .then((value)=>{
+
+        this.localNotifications.clearAll();
+      
+      })
+      .catch((e)=>{
+      })
+
+    }
+
+
+
   }
+
   notify() {
     // alert("toggled: "+ this.isToggled); 
   }
@@ -100,7 +142,7 @@ this.navCtrl.setRoot(TabsPage)
            
         })
         .catch((e)=>{
-          alert(e);
+          // alert(e);
           this.navCtrl.setRoot(TabsPage);
         })
 //lost history code start
@@ -134,7 +176,7 @@ this.navCtrl.setRoot(TabsPage)
     //lost history end
 
         console.log('disconnected');
-        alert('disconnected');
+        // alert('disconnected');
 
         this.localNotifications.schedule({
           id: 1,
@@ -146,7 +188,7 @@ this.navCtrl.setRoot(TabsPage)
         });
     }
 
-    ngDoCheck() {
+    rangeChange() {
 
       this.ble.readRSSI(this.device.id)
       .then((rssi)=>{
@@ -169,28 +211,21 @@ this.navCtrl.setRoot(TabsPage)
         })
         
       }
-/*
-      this.ble.isConnected(this.device.id)
-      .then(
-        (connectData)=>{},
-        (connectData)=>{
-          // alert(connectData)
-          let value = 2;
-          let buffer = new Uint8Array([value]).buffer;
-          this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
-          .then((value)=>{
-            this.localNotifications.schedule({
-              id: 1,
-              text: 'Your Wallet is Disconnected',
-              sound: 'file://audio/alarm2.mp3'
-             });
-          })
-          .catch((e)=>{
-          })
-        }
-      )
-      .catch((e)=>{alert("connecton error "+e)});
- */
+      else {
+
+        let value = 0;
+        let buffer = new Uint8Array([value]).buffer;
+        this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        .then((value)=>{
+
+          this.localNotifications.clearAll();
+        
+        })
+        .catch((e)=>{
+        })
+
+      }
+
     }
     ngOnChanges(changes:SimpleChanges) {
       if(this.bleRssi>this.deviceRssi && this.isToggled == false) {
@@ -259,6 +294,9 @@ connectToCharacteristic(deviceID,characteristic) {
     searchPeripheral(deviceID){
       this.ngZone.run(() => {
         if(this.isToggled==false){
+
+      // for(var i=0;i<10;i++) {
+
         this.value = 2;
         let buffer = new Uint8Array([this.value]).buffer;
 
@@ -272,6 +310,15 @@ connectToCharacteristic(deviceID,characteristic) {
           alert('search device error'+e);
           this.searchClick = true;
         })
+
+          if(this.searchClick!=false)
+          setTimeout(() => {
+            this.searchClick=true;
+            
+          }, 10000);
+
+        // }
+
       }
       else{
         let alert = this.alertCtrl.create({
@@ -281,7 +328,6 @@ connectToCharacteristic(deviceID,characteristic) {
         });
         alert.present();
       }
-      // }, 50000);
 
       })
     }

@@ -10,6 +10,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import * as firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
 import { LocationHistoryPage } from '../pages/location-history/location-history';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,7 +23,7 @@ export class MyApp {
   longitude: any;
 
 
-  constructor(public loadingCtrl: LoadingController,public zone:NgZone,platform: Platform,private locationAccuracy: LocationAccuracy,private diagnostic: Diagnostic,private geolocation: Geolocation, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(private backgroundMode: BackgroundMode,public loadingCtrl: LoadingController,public zone:NgZone,platform: Platform,private locationAccuracy: LocationAccuracy,private diagnostic: Diagnostic,private geolocation: Geolocation, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -44,6 +45,7 @@ export class MyApp {
             //   .catch(error => console.error('Error getting token', error));
             loading.dismiss()
             this.rootPage=TabsPage;
+            this.backgroundMode.enable();
           })
         }else{
           this.zone.run(()=>{

@@ -55,20 +55,20 @@ export class HomePage {
         });
       });
       
-    setTimeout(() => {
-        this.ble.stopScan().then(() => {
+        setTimeout(() => {
+            this.ble.stopScan().then(() => {
 
-        this.ngZone.run(() => {
-        console.log('Scanning has stopped');
-        console.log(JSON.stringify(this.devices))
-        this.isScanning = false;
-        loading.dismiss();
-        this.connecting = true;
-        });
-      });
-    }, 5000);
+            this.ngZone.run(() => {
+            console.log('Scanning has stopped');
+            console.log(JSON.stringify(this.devices))
+            this.isScanning = false;
+            loading.dismiss();
+            this.connecting = true;
+            });
+          });
+        }, 5000);
 
-  })
+      })
       .catch(()=>{
         this.ble.enable().then(()=>{
           console.log('bluetooth enabling....');
@@ -157,41 +157,40 @@ export class HomePage {
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
         loading.dismiss();
-        // alert('connected');
+
         this.connecting = false;     
       });
   
       this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
-        // alert(resp.timestamp)
-        // this.timeConverter(resp.timestamp);
+
         this.getTime()
         this.latitude = resp.coords.latitude;
         this.longitude = resp.coords.longitude;
         console.log(this.latitude);
         
   
-    this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
-    .then((result: NativeGeocoderReverseResult) => {
-      loading.dismiss();
-      console.log(result);
-      console.log(JSON.stringify(result));
-      var location = (result[0].thoroughfare ? (result[0].subLocality+', ') : '') + result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
-      firebase.database().ref('/userSummary/'+this.user_id+'/location-history/').push({
-        latitude: this.latitude,
-        longitude: this.longitude,
-        location: location,
-        time: this.time
-      })    
-    })
-    .catch((error: any) => {
-      loading.dismiss();
-      alert(error);
-    });
+          this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude)
+          .then((result: NativeGeocoderReverseResult) => {
+            loading.dismiss();
+            console.log(result);
+            console.log(JSON.stringify(result));
+            var location = (result[0].thoroughfare ? (result[0].subLocality+', ') : '') + result[0].subLocality+', '+result[0].locality+', '+result[0].subAdministrativeArea+', '+result[0].administrativeArea+', '+result[0].countryName+', '+result[0].postalCode+'.'
+            firebase.database().ref('/userSummary/'+this.user_id+'/location-history/').push({
+              latitude: this.latitude,
+              longitude: this.longitude,
+              location: location,
+              time: this.time
+            })    
+          })
+          .catch((error: any) => {
+            loading.dismiss();
+            alert(error);
+          });
 
-  }).catch((error) => {
-    console.log('Error getting location', error);
-    alert(error);
-  });
+        }).catch((error) => {
+          console.log('Error getting location', error);
+          alert(error);
+        });
 
       },
       peripheralData => {
@@ -205,7 +204,7 @@ export class HomePage {
         // alert('high alert..'+value);
       })
       .catch((e)=>{
-        alert(e);
+        // alert(e);
       })
 //lost history code start
       this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
@@ -237,7 +236,7 @@ export class HomePage {
   });
   //end lost history
       console.log('disconnected');
-      alert('disconnected');
+      // alert('disconnected');
 
       this.localNotifications.schedule({
         id: 1,
