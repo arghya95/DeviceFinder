@@ -44,14 +44,14 @@ export class DevicePage {
     this.searchClick = true;
     this.user_id = firebase.auth().currentUser.uid;
     this.isToggled = false;
-    this.deviceRssi = -100;
+    this.deviceRssi = -97;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DevicePage');
     this.connect(this.device.id);
 
-
+/**
     this.ble.readRSSI(this.device.id)
     .then((rssi)=>{
       this.bleRssi = rssi;
@@ -87,7 +87,7 @@ export class DevicePage {
       })
 
     }
-
+ */
 
 
   }
@@ -105,29 +105,14 @@ export class DevicePage {
         console.log(peripheralData.characteristics);
         this.characteristics = peripheralData.characteristics;
         
-        /*
-        this.ble.read(deviceID, LIGHTBULB_SERVICE, SWITCH_CHARACTERISTIC).then(
-          buffer => {
-            let data = new Uint8Array(buffer);
-            console.log('switch characteristic ' + data[0]);
-            alert('switch characteristic ' + data[0])
-         
-                this.power = data[0] !== 0;
-          
-          }
-        )
-        .catch(()=>{
-          alert('not found');
-        })
-        */
-       
+
         this.connecting = false;
         },
         peripheralData => {
-this.navCtrl.setRoot(TabsPage)
+        this.navCtrl.setRoot(TabsPage)
         this.connecting = false;
         this.searchClick = true;
-
+        this.navCtrl.setRoot(TabsPage);
         let value = 2;
         let buffer = new Uint8Array([value]).buffer;
         this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
@@ -143,7 +128,7 @@ this.navCtrl.setRoot(TabsPage)
         })
         .catch((e)=>{
           // alert(e);
-          this.navCtrl.setRoot(TabsPage);
+          
         })
 //lost history code start
         this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
@@ -187,14 +172,18 @@ this.navCtrl.setRoot(TabsPage)
         
         });
     }
-
-    rangeChange() {
+/*
+    ngDoCheck() {
 
       this.ble.readRSSI(this.device.id)
       .then((rssi)=>{
         this.bleRssi = rssi;
       })
-      if(this.bleRssi<this.deviceRssi && this.isToggled == false) {
+      .catch((e)=>{
+        alert(e);
+        this.navCtrl.setRoot(TabsPage)
+      })
+      if(this.bleRssi<this.deviceRssi) {
         let value = 2;
         let buffer = new Uint8Array([value]).buffer;
         this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
@@ -207,7 +196,7 @@ this.navCtrl.setRoot(TabsPage)
            });
         })
         .catch((e)=>{
-          // alert(e);
+          alert(e);
         })
         
       }
@@ -226,7 +215,8 @@ this.navCtrl.setRoot(TabsPage)
 
       }
 
-    }
+    }*/
+    /*
     ngOnChanges(changes:SimpleChanges) {
       if(this.bleRssi>this.deviceRssi && this.isToggled == false) {
         let value = 0;
@@ -242,8 +232,47 @@ this.navCtrl.setRoot(TabsPage)
         
       }
     }
+*/
+ngDoCheck() {
 
+  this.ble.readRSSI(this.device.id)
+  .then((rssi)=>{
+    this.bleRssi = rssi;
+  })
+  if((this.bleRssi<this.deviceRssi) && (this.isToggled == false)) {
+    let value = 2;
+    let buffer = new Uint8Array([value]).buffer;
+    this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+    .then((value)=>{
+      // alert('high alert..'+value);
+      this.localNotifications.schedule({
+        id: 1,
+        text: 'Your Wallet is Out of Range',
+        sound: 'file://audio/alarm2.mp3'
+       });
+      
+    })
+    // .catch((e)=>{
+    //   alert('range error'+e);
+      
+    //   let value = 0;
+    //     let buffer = new Uint8Array([value]).buffer;
+    //     this.ble.writeWithoutResponse(this.device.id,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+    //     .then((value)=>{
 
+    //       this.localNotifications.clearAll();
+        
+    //     })
+    //     .catch((e)=>{
+    //       alert('catch err '+e)
+    //     })
+
+    // })
+    
+  }
+ 
+  
+}
     public schedule() {
       // Schedule a single notification
       if(this.isToggled == true) {
@@ -263,7 +292,7 @@ this.navCtrl.setRoot(TabsPage)
       }
       }
 
-connectToCharacteristic(deviceID,characteristic) {
+  connectToCharacteristic(deviceID,characteristic) {
         console.log("Connect To Characteristic");
         console.log(deviceID);
         // alert(characteristic.service);
@@ -291,17 +320,18 @@ connectToCharacteristic(deviceID,characteristic) {
     }
 
     }
+ 
+
     searchPeripheral(deviceID){
       this.ngZone.run(() => {
         if(this.isToggled==false){
 
       // for(var i=0;i<10;i++) {
-
         this.value = 2;
         let buffer = new Uint8Array([this.value]).buffer;
 
         // setTimeout(() => {
-        this.ble.write(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
           // alert('high alert..'+value);
           this.searchClick = false;
@@ -318,7 +348,6 @@ connectToCharacteristic(deviceID,characteristic) {
           }, 10000);
 
         // }
-
       }
       else{
         let alert = this.alertCtrl.create({
@@ -331,13 +360,14 @@ connectToCharacteristic(deviceID,characteristic) {
 
       })
     }
+
     stopSearch(deviceID) {
       this.ngZone.run(() => {
         this.value = 0;
         let buffer = new Uint8Array([this.value]).buffer;
-        this.ble.write(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
+        this.ble.writeWithoutResponse(deviceID,LIGHTBULB_SERVICE,SWITCH_CHARACTERISTIC,buffer)
         .then((value)=>{
-          // alert('high alert..'+value);
+          // alert(value);
           this.searchClick = true;
         })
         .catch((e)=>{

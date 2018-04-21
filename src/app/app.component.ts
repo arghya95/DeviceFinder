@@ -40,9 +40,6 @@ export class MyApp {
         if(user){
           this.zone.run(()=>{
 
-            // this.firebaseNative.subscribe("AhareBangla")
-            //   .then(token => console.log(`The token is ${token}`)) // save the token server-side and use it to push notifications to this device
-            //   .catch(error => console.error('Error getting token', error));
             loading.dismiss()
             this.rootPage=TabsPage;
             this.backgroundMode.enable();

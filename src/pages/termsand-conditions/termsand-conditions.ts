@@ -20,11 +20,12 @@ export class TermsandConditionsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TermsandConditionsPage');
-    const options: DocumentViewerOptions = {
+/*    const options: DocumentViewerOptions = {
       title: 'Terms And Conditions'
     }
  
     this.document.viewDocument('www/assets/Terms&Conditions.pdf', 'application/pdf', options);
+    */
   }
  
 }

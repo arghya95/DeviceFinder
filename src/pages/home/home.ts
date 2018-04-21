@@ -151,7 +151,8 @@ export class HomePage {
       });
       loading.present();
 
-    this.ble.connect(device.id).subscribe(peripheralData => {
+    this.ble.connect(device.id)
+    .subscribe(peripheralData => {
       this.ngZone.run(() => {
         console.log('peripheralData');
         console.log(peripheralData.characteristics);
@@ -194,7 +195,7 @@ export class HomePage {
 
       },
       peripheralData => {
-      this.connecting = false;
+      this.connecting = true;
       loading.dismiss()
 
       let value = 2;
@@ -224,7 +225,7 @@ export class HomePage {
         longitude: this.longitude,
         location: location,
         time: this.time
-      })    
+      })     
     })
     .catch((error: any) => {
       alert(error);
@@ -249,7 +250,7 @@ export class HomePage {
 
     disconnect(device) {
       this.ble.disconnect(device.id)
-      .then((data)=>{alert(data);this.connecting=true;})
+      .then((data)=>{this.connecting=true;})
       .catch(e=>{alert(e)})
     }
 
@@ -272,5 +273,5 @@ export class HomePage {
                 + currentdate.getMinutes() + ":" 
                 + currentdate.getSeconds();
                 return this.time;
-    }
+     }
 }
